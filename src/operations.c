@@ -6,16 +6,16 @@
 /*   By: soutin <soutin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 16:42:22 by soutin            #+#    #+#             */
-/*   Updated: 2023/06/27 22:19:27 by soutin           ###   ########.fr       */
+/*   Updated: 2023/06/29 18:18:29 by soutin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
-ps_list	*swap(ps_list **head)
+t_pslist	*swap(t_pslist **head)
 {
-	ps_list	*tmp;
-	ps_list	*buf;
+	t_pslist	*tmp;
+	t_pslist	*buf;
 
 	if (ps_lstsize(head) > 1)
 	{
@@ -29,10 +29,10 @@ ps_list	*swap(ps_list **head)
 	return (NULL);
 }
 
-ps_list	*push(ps_list **from, ps_list **to)
+t_pslist	*push(t_pslist **from, t_pslist **to)
 {
-	ps_list	*tmp;
-	
+	t_pslist	*tmp;
+
 	if (!*from)
 		return (NULL);
 	tmp = *from;
@@ -45,10 +45,10 @@ ps_list	*push(ps_list **from, ps_list **to)
 	return (*from);
 }
 
-ps_list	*rotate(ps_list	**head)
+t_pslist	*rotate(t_pslist **head)
 {
-	ps_list	*tmp;
-	ps_list	*last;
+	t_pslist	*tmp;
+	t_pslist	*last;
 
 	if (!*head)
 		return (NULL);
@@ -62,10 +62,10 @@ ps_list	*rotate(ps_list	**head)
 	return (*head);
 }
 
-ps_list	*reverse_rotate(ps_list **head)
+t_pslist	*reverse_rotate(t_pslist **head)
 {
-	ps_list	*tmp;
-	ps_list	*last;
+	t_pslist	*tmp;
+	t_pslist	*last;
 
 	if (!*head)
 		return (NULL);

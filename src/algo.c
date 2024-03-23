@@ -6,139 +6,97 @@
 /*   By: soutin <soutin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 18:12:38 by soutin            #+#    #+#             */
-/*   Updated: 2023/06/27 23:38:41 by soutin           ###   ########.fr       */
+/*   Updated: 2023/07/05 19:37:55 by soutin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
-
-int	get_nb_bits(int max)
+void	radix(t_pslist **a, t_pslist **b)
 {
-	int	i;
-
-	i = 0;
-	while (max >= 2)
-	{
-		max /= 2;
-		i++;
-	}
-	i++;
-	return (i);
-}
-
-int	b_sorted(ps_list **b)
-{
-	ps_list	*tmp;
-
-	tmp = *b;
-	while (tmp->next)
-	{
-		if (tmp->index < tmp->next->index)
-			return (0);
-		tmp = tmp->next;
-	}
-	return (1);
-}
-
-void	radix(ps_list **a, ps_list **b)
-{
-	int	i;
-	int	max_bt;
+	int	shift;
+	int	max_nb_bits;
 	int	size;
-	ps_list	*tmp;
 
-	i = 0;
-	max_bt = get_nb_bits(ps_lstsize(a) - 1);
-	while (i < max_bt)
+	shift = 0;
+	max_nb_bits = get_nb_bits(ps_lstsize(a) - 1);
+	while (shift < max_nb_bits)
 	{
 		size = ps_lstsize(a);
 		while (size)
 		{
-			tmp = *a;
-			if (!((tmp->index >> i) & 1))
+			if (!(((*a)->index >> shift) & 1) && !is_sorted(a))
 				pb(a, b);
-			else
+			else if (!is_sorted(a))
 				ra(a);
 			size--;
 		}
-		i++;
-		radib(a, b, ps_lstsize(b), i, max_bt);
-		if ((is_sorted(a) && !b) || (is_sorted(a) && b_sorted(b)))
-			break;
+		radib(a, b, ++shift);
 	}
 	while (ps_lstsize(b))
 		pa(a, b);
 }
 
-int	find_next(ps_list **a, int shift)
+void	radib(t_pslist **a, t_pslist **b, int shift)
+{
+	int	max_nb_bits;
+	int	size;
+
+	size = ps_lstsize(b);
+	max_nb_bits = get_nb_bits(ps_lstsize(a) + ps_lstsize(b) - 2);
+	while (size)
+	{
+		if (((*b)->index >> shift) & 1)
+			pa(a, b);
+		else if (shift < max_nb_bits)
+			rb(b);
+		size--;
+	}
+}
+
+void	mini_algo_x3(t_pslist **a)
 {
 	int	i;
-	ps_list	*tmp;
 
 	i = 0;
-	tmp = *a;
-	while (tmp)
+	while (i < 2)
 	{
-		if (!((tmp->index >> shift) & 1))
-			return (i);
-		tmp = tmp->next;
-	}
-	return (-1);
-}
-
-void	radib(ps_list **a, ps_list **b, int len, int shift, int	max_bt)
-{
-	ps_list	*tmp;
-	int	to_move;
-
-	to_move = find_next(a, shift);
-	tmp = *b;
-	while (len)
-	{
-		if ((tmp->index >> shift) & 1)
-			tmp = pa(a, b);
-		else if (shift < max_bt && to_move)
-		{
-			tmp = rr(a, b);
-			to_move--;
-		}
-		else if (shift < max_bt)
-			tmp = rb(b);
-		len--;
+		if ((*a)->index > (*a)->next->index)
+			sa(a);
+		if ((*a)->index > ps_lstlast(a)->index)
+			ra(a);
+		if ((*a)->index > (*a)->next->index
+			&& (*a)->index > ps_lstlast(a)->index)
+			ra(a);
+		if ((*a)->next->index > ps_lstlast(a)->index)
+			rra(a);
+		i++;
 	}
 }
 
-void	mini_algo_x3(ps_list **a)
+void	mini_algo(t_pslist **a, t_pslist **b)
 {
-	ps_list	*tmp;
+	int	size;
+	int	max;
+	int	i;
 
-	tmp = *a;
-	while (!is_sorted(a))
+	size = ps_lstsize(a);
+	max = size - 3;
+	i = 0;
+	while (i < size)
 	{
-		if (tmp->index > tmp->next->index)
-			tmp = sa(a);
-		else if (tmp->index > ps_lstlast(a)->index)
-			tmp = rra(a);
-		else if (tmp->next->index < ps_lstlast(a)->index)
-			tmp = ra(a);
-	}	
+		if ((*a)->index < max)
+			pb(a, b);
+		else
+			ra(a);
+		i++;
+	}
+	mini_algo_x3(a);
+	while (ps_lstsize(b))
+	{
+		if ((*b)->index + 1 == (*a)->index)
+			pa(a, b);
+		else
+			rb(b);
+	}
 }
-
-
-// void	mini_algo(ps_list **a, ps_list **b)
-// {
-// 	ps_list	*tmp;
-// 	int	size;
-
-// 	tmp = *a;
-// 	size = ps_lstsize(a) - 1;
-// 	while (!check_if_sorted(a))
-// 	{
-// 		while (tmp->index != size && ps_lstsize(a) != 1)
-// 		{
-			
-// 		}
-// 	}
-	
-// }

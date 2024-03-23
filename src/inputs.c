@@ -6,82 +6,76 @@
 /*   By: soutin <soutin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 15:17:26 by soutin            #+#    #+#             */
-/*   Updated: 2023/06/27 22:50:42 by soutin           ###   ########.fr       */
+/*   Updated: 2023/07/05 19:28:05 by soutin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
-
-int	check_duplicate(ps_list **head)
+int	check_duplicate(t_pslist **head)
 {
-	ps_list	*current;
-	ps_list	*tmp;
+	t_pslist	*tmp;
+	t_pslist	*buf;
 
-	current = *head;
-	while (current)
+	tmp = *head;
+	while (tmp)
 	{
-		tmp = current->next;
-		while (tmp)
+		buf = tmp->next;
+		while (buf)
 		{
-			if (current->content == tmp->content)
+			if (tmp->content == buf->content)
 				return (1);
-			tmp = tmp->next;
+			buf = buf->next;
 		}
-		current = current->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
 
-int	check_and_fill(char **v, ps_list **head)
+int	fill(char *v, t_pslist **head)
 {
-	int	i;
-	int	flag;
-	ps_list	*current;
+	int			flag;
+	t_pslist	*last;
 
-	flag = 0;
-	i = 1;
-	while (v[i])
+	if (*head == NULL)
+		*head = ps_atoi(v, &flag);
+	else
 	{
-		if (*head == NULL)
-			*head = ps_atoi(v[i], &flag);
-		else
-		{
-			current = *head;
-			while (current->next)
-				current = current->next;
-			current->next = ps_atoi(v[i], &flag);
-		}
-		if (flag)
-			return (1);
-		i++;
+		last = ps_lstlast(head);
+		last->next = ps_atoi(v, &flag);
+		if (!last->next)
+			return (-1);
 	}
-	if (check_duplicate(head) || i < 2)
+	if (flag)
 		return (1);
 	return (0);
 }
 
-int	is_sorted(ps_list **head)
+int	check_and_fill(char **v, t_pslist **head)
 {
-	ps_list	*tmp;
+	int	i;
+	int	error;
 
-	tmp = *head;
-	while (tmp->next)
+	i = 1;
+	while (v[i])
 	{
-		if (tmp->content > tmp->next->content)
-			return (0);
-		tmp = tmp->next;
+		error = fill(v[i], head);
+		if (error == 1)
+			return (ps_lstclear(head), 1);
+		else if (error == -1)
+			return (ps_lstclear(head), 0);
+		i++;
 	}
-	return (1);
+	if (check_duplicate(head))
+		return (ps_lstclear(head), 1);
+	return (0);
 }
 
-ps_list	*ps_atoi(const char *nptr, int *flag)
+t_pslist	*ps_atoi(const char *nptr, int *flag)
 {
 	long long	number;
 	int			sign;
-	int			nbs;
 
-	nbs = 0;
 	number = 0;
 	sign = 1;
 	*flag = 1;

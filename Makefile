@@ -6,7 +6,7 @@
 #    By: soutin <soutin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/18 15:41:57 by soutin            #+#    #+#              #
-#    Updated: 2023/06/27 05:21:48 by soutin           ###   ########.fr        #
+#    Updated: 2023/07/05 20:39:35 by soutin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ OBJ_DIR		:=		obj
 LIBFT_DIR	=		libft
 
 NAME		=		push_swap
-SRC			=		$(wildcard $(SRC_DIR)/*.c)
+SRC			=		src/algo_utils.c src/algo.c src/inputs.c src/instructions_1.c src/instructions_2.c src/lists_utils.c src/main.c src/operations.c
 OBJ			=		$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBFT		=		libft/libft.a
 

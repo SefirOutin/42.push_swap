@@ -1,69 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lists_utils.c                                      :+:      :+:    :+:   */
+/*   algo_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soutin <soutin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/22 18:50:22 by soutin            #+#    #+#             */
-/*   Updated: 2023/06/29 18:19:22 by soutin           ###   ########.fr       */
+/*   Created: 2023/06/28 23:16:48 by soutin            #+#    #+#             */
+/*   Updated: 2023/07/05 19:24:59 by soutin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
-int	ps_lstsize(t_pslist **head)
+int	get_nb_bits(int max)
 {
-	int			i;
-	t_pslist	*tmp;
+	int	i;
 
-	tmp = *head;
 	i = 0;
-	while (tmp != NULL)
+	while (max >= 2)
 	{
+		max /= 2;
 		i++;
-		tmp = tmp->next;
 	}
+	i++;
 	return (i);
 }
 
-t_pslist	*ps_lstlast(t_pslist **lst)
+int	is_sorted(t_pslist **head)
 {
 	t_pslist	*tmp;
 
-	tmp = *lst;
-	if (tmp == NULL)
-		return (NULL);
-	while (tmp->next != NULL)
+	tmp = *head;
+	while (tmp->next)
+	{
+		if (tmp->content > tmp->next->content)
+			return (0);
 		tmp = tmp->next;
-	return (tmp);
+	}
+	return (1);
 }
 
-t_pslist	*ps_lstnew(int content)
+void	normalize(t_pslist **head)
 {
-	t_pslist	*c;
-
-	c = malloc(sizeof(*c));
-	if (!c)
-		return (NULL);
-	c->content = content;
-	c->next = NULL;
-	return (c);
-}
-
-void	ps_lstclear(t_pslist **lst)
-{
-	t_pslist	*t;
+	t_pslist	*tmp;
 	t_pslist	*buf;
 
-	if (!lst)
+	tmp = *head;
+	if (!*head)
 		return ;
-	t = *lst;
-	while (t)
+	while (tmp)
 	{
-		buf = t->next;
-		free(t);
-		t = buf;
+		tmp->index = 0;
+		buf = *head;
+		while (buf)
+		{
+			if (tmp->content > buf->content)
+				tmp->index++;
+			buf = buf->next;
+		}
+		tmp = tmp->next;
 	}
-	*lst = NULL;
 }
